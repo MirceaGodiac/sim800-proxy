@@ -1,31 +1,34 @@
-import express from 'express';
-import fetch from 'node-fetch';
-import cors from 'cors';
+const express = require('express');
+const axios = require('axios');
 
 const app = express();
-app.use(cors());
 app.use(express.json());
 
-app.post('/proxy', async (req, res) => {
-  const apiKey = req.headers['x-api-key'];
-  if (apiKey !== process.env.API_KEY) return res.status(403).json({ error: 'Forbidden' });
-
+app.post("/proxy", async (req, res) => {
   try {
-    const response = await fetch('https://live-trail-server.vercel.app/api/data', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': "A"
-      },
-      body: JSON.stringify(req.body)
-    });
+    console.log("Incoming data:", req.body);
 
-    const data = await response.json();
-    res.json(data);
+    const response = await axios.post(
+      "https://live-trail-server.vercel.app/api/data",
+      {
+        trailId: req.body.trailId,
+        moisture: req.body.moisture,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": req.body.apiKey,
+        },
+      }
+    );
+
+    res.json(response.data);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Proxy fetch error:", err.message);
+    res.status(500).json({ error: "Proxy error", details: err.message });
   }
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Proxy running on port ${PORT}`));
+app.listen(3000, () => {
+  console.log("Proxy server running on http://localhost:3000");
+});

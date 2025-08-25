@@ -1,18 +1,23 @@
 {
   "name": "sim800-proxy",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "main": "proxy.js",
   "type": "commonjs",
+  "scripts": {
+    "start": "node proxy.js",
+    "dev": "nodemon proxy.js"
+  },
   "dependencies": {
+    "body-parser": "^1.20.2",
     "cors": "^2.8.5",
-    "express": "^5.1.0",
-    "node-fetch": "^3.3.2"
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.2.0",
+    "helmet": "^7.1.0",
+    "morgan": "^1.10.0",
+    "node-fetch": "^2.7.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
   }
 }
